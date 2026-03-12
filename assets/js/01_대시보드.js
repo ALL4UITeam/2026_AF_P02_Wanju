@@ -58,7 +58,7 @@ function createBusCardMarkup(item) {
 				</ol>
 			</div>
 			<div class="bus-card__bus-icon" aria-label="현재 버스 위치">
-				<img src="./assets/images/dashboard/card-bus.svg" alt="">
+				<img src="../assets/images/dashboard/card-bus.svg" alt="">
 			</div>
 		</div>
 	`;
