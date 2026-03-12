@@ -1,0 +1,42 @@
+@use '../utils/var' as *;
+@use '../utils/function' as *;
+@use 'sass:list';
+
+$icons: (
+    del: (1.4rem, 1.4rem),
+    close: (1.4rem, 1.4rem),
+    window: (1.4rem, 1.4rem),
+    download: (1.9rem, 1.9rem)
+);
+
+@mixin icon($url, $width, $height) {
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url($url);
+    width: $width;
+    height: $height;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+
+.icon{
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    @each $name, $dimensions in $icons {
+        $width: list.nth($dimensions, 1);
+        $height: list.nth($dimensions, 2);
+        &-#{$name}{
+            &._white {
+                @include icon("../images/icon/icon-#{$name}-white.png", $width, $height);
+                @include responsive(md){
+                    width: 1.2rem;height: 1.2rem;
+                    background-size: cover;
+                    background-position: 50% 50%;
+                }
+            }
+        }
+    }
+    
+}
