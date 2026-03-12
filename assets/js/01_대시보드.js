@@ -1,12 +1,12 @@
 import "./main.js";
 const busData = [
-  { routeNumber: "33", destination: "지암마을", arrivalMin: 6, origin: "지암마을", via: "운곡모아미래도2차아파트", target: "완주군청", busPosition: "25%" },
+  { routeNumber: "33", destination: "지암마을", arrivalMin: 3, origin: "지암마을", via: "운곡모아미래도2차아파트", target: "완주군청", busPosition: "25%" },
   { routeNumber: "34-1", destination: "운곡모아미래도 2차아파트", arrivalMin: 10, origin: "복합문화지구누에 · 용봉초교", via: "운곡마을", target: "완주군청", busPosition: "35%" },
   { routeNumber: "50", destination: "소향회차지", arrivalMin: 38, origin: "구만리", via: "운곡마을", target: "완주군청", busPosition: "15%" },
-  { routeNumber: "52", destination: "삼례터미널", arrivalMin: 12, origin: "삼례시장", via: "우석대학교", target: "완주군청", busPosition: "40%" },
+  { routeNumber: "52", destination: "삼례터미널", arrivalMin: 6, origin: "삼례시장", via: "우석대학교", target: "완주군청", busPosition: "40%" },
   { routeNumber: "71", destination: "봉동읍", arrivalMin: 18, origin: "봉동시장", via: "둔산공원", target: "완주군청", busPosition: "60%" },
   { routeNumber: "82", destination: "혁신도시", arrivalMin: 24, origin: "이서면", via: "전북혁신도시", target: "완주군청", busPosition: "45%" },
-  { routeNumber: "90", destination: "고산터미널", arrivalMin: 7, origin: "고산시장", via: "삼례읍", target: "완주군청", busPosition: "30%" }
+  { routeNumber: "90", destination: "고산터미널", arrivalMin: 4, origin: "고산시장", via: "삼례읍", target: "완주군청", busPosition: "30%" }
 ];
 const CARDS_PER_PAGE = 3;
 const FLIP_DURATION = 800;
@@ -94,7 +94,7 @@ function updateArrivalBanner() {
   } else {
     emptyEl.classList.remove("is-visible");
     listEl.classList.add("is-visible");
-    listEl.innerHTML = soonBuses.map((item) => `<li class="map__arrival-item">${item.routeNumber} ${item.destination}</li>`).join("");
+    listEl.innerHTML = soonBuses.map((item) => `<li class="map__arrival-item"><strong>${item.routeNumber}</strong> ${item.destination}</li>`).join("");
   }
 }
 function initDashboard() {
