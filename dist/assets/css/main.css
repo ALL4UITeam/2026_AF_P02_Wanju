@@ -606,12 +606,24 @@ body {
   color: #012333;
 }
 .bus-card__stop-dot, .bus-card__stop-pin-dot {
+  position: relative;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background: #C6C6C6;
   margin-bottom: 6px;
   flex-shrink: 0;
+}
+.bus-card__stop-dot::after, .bus-card__stop-pin-dot::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  content: "";
+  width: 4px;
+  height: 4px;
+  background: #fff;
 }
 .bus-card__stop-pin {
   position: relative;
@@ -1041,14 +1053,15 @@ body {
   position: absolute;
   top: 40px;
   right: 40px;
-  padding: 24px 36px;
-  background: linear-gradient(135deg, #1c3f8f 0%, #10285f 100%);
-  border-radius: 16px;
+  padding: 32px;
+  background: #012333;
+  border-radius: 32px;
+  width: calc(100% - 80px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 .map__arrival-title {
   display: block;
-  font-size: 20px;
+  font-size: 32px;
   font-weight: 600;
   color: #fff;
   margin-bottom: 16px;
@@ -1059,11 +1072,11 @@ body {
   justify-content: center;
   min-height: 80px;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.2);
+  background: #1A3947;
   border-radius: 12px;
-  font-size: 18px;
+  font-size: 32px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgb(255, 255, 255);
   transition: opacity 0.3s ease;
 }
 .map__arrival-empty:not(.is-visible) {
@@ -1078,11 +1091,15 @@ body {
   display: none;
 }
 .map__arrival-item {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 52px;
+  font-weight: 500;
   color: #fff;
   line-height: 1.5;
   animation: arrivalItemIn 0.4s ease-out forwards;
+}
+.map__arrival-item strong {
+  font-weight: 600;
+  font-size: 60px;
 }
 .map__arrival-item:nth-child(1) {
   animation-delay: 0.08s;
