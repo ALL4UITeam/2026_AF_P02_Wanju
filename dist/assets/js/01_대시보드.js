@@ -13,6 +13,7 @@ const FLIP_DURATION = 800;
 const FLIP_STAGGER = 150;
 const FLIP_INTERVAL = 1e4;
 const ARRIVAL_SOON_MIN = 5;
+const busIcon = new URL("" + new URL("../images/card-bus.svg", import.meta.url).href, import.meta.url).href;
 function createBusCardMarkup(item) {
   if (!item) {
     return `
@@ -58,7 +59,7 @@ function createBusCardMarkup(item) {
 				</ol>
 			</div>
 			<div class="bus-card__bus-icon" aria-label="현재 버스 위치">
-				<img src="./assets/images/dashboard/card-bus.svg" alt="">
+				<img src="${busIcon}" alt="">
 			</div>
 		</div>
 	`;
