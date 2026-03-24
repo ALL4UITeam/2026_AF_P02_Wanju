@@ -11,9 +11,9 @@ const busData = [
 ];
 
 const CARDS_PER_PAGE = 3;
-const FLIP_DURATION = 800;
-const FLIP_STAGGER = 150;
-const FLIP_INTERVAL = 10000;
+const TRANSITION_DURATION = 800;
+const TRANSITION_STAGGER = 150;
+const CHANGE_INTERVAL = 10000;
 const ARRIVAL_SOON_MIN = 5;
 
 const busIcon = new URL("../assets/images/dashboard/card-bus.svg", import.meta.url).href;
@@ -75,6 +75,7 @@ function createBusCardMarkup(item) {
 
 function setCardPage(container, pageData, targetFaceClass) {
 	const cards = container.querySelectorAll('.bus-card');
+
 	cards.forEach((card, index) => {
 		const face = card.querySelector(targetFaceClass);
 		if (face) {
@@ -83,12 +84,62 @@ function setCardPage(container, pageData, targetFaceClass) {
 	});
 }
 
+function initCardFaces(container, pageData) {
+	const cards = container.querySelectorAll('.bus-card');
+
+	cards.forEach((card, index) => {
+		const front = card.querySelector('.bus-card__face--front');
+		const back = card.querySelector('.bus-card__face--back');
+
+		if (!front || !back) return;
+
+		front.innerHTML = createBusCardMarkup(pageData[index]);
+		back.innerHTML = '';
+
+		front.classList.add('is-active');
+		front.classList.remove('is-next');
+
+		back.classList.remove('is-active', 'is-next');
+		card.classList.remove('is-fading');
+	});
+}
+
+function swapCardPage(card, nextHtml) {
+	const front = card.querySelector('.bus-card__face--front');
+	const back = card.querySelector('.bus-card__face--back');
+
+	if (!front || !back) return;
+
+	const activeFace = front.classList.contains('is-active') ? front : back;
+	const nextFace = activeFace === front ? back : front;
+
+	nextFace.innerHTML = nextHtml;
+	nextFace.classList.remove('is-active');
+	nextFace.classList.add('is-next');
+
+	requestAnimationFrame(() => {
+		card.classList.add('is-fading');
+
+		setTimeout(() => {
+			activeFace.classList.remove('is-active');
+			activeFace.classList.remove('is-next');
+
+			nextFace.classList.remove('is-next');
+			nextFace.classList.add('is-active');
+
+			card.classList.remove('is-fading');
+		}, TRANSITION_DURATION);
+	});
+}
+
 function getPageData(pageIndex) {
 	const start = pageIndex * CARDS_PER_PAGE;
 	const data = busData.slice(start, start + CARDS_PER_PAGE);
+
 	while (data.length < CARDS_PER_PAGE) {
 		data.push(null);
 	}
+
 	return data;
 }
 
@@ -126,46 +177,28 @@ function initDashboard() {
 	let currentPageIndex = 0;
 
 	if (pages.length > 0) {
-		setCardPage(container, pages[0], '.bus-card__face--front');
-		setCardPage(container, pages[0], '.bus-card__face--back');
+		initCardFaces(container, pages[0]);
 	}
+
 	updateArrivalBanner();
 
-	function flipToNextPage() {
+	function showNextPage() {
 		if (pages.length <= 1) return;
 
 		const nextPageIndex = (currentPageIndex + 1) % pages.length;
 		const nextPageData = pages[nextPageIndex];
 
-		setCardPage(container, nextPageData, '.bus-card__face--back');
-
-		cards.forEach((card, i) => {
+		cards.forEach((card, index) => {
 			setTimeout(() => {
-				card.classList.add('is-flipped');
-			}, i * FLIP_STAGGER);
+				const nextHtml = createBusCardMarkup(nextPageData[index]);
+				swapCardPage(card, nextHtml);
+			}, index * TRANSITION_STAGGER);
 		});
 
-		const totalFlipTime = FLIP_DURATION + (cards.length - 1) * FLIP_STAGGER;
-		setTimeout(() => {
-			cards.forEach((card) => {
-				card.classList.add('is-resetting');
-			});
-			setCardPage(container, nextPageData, '.bus-card__face--front');
-			cards.forEach((card) => {
-				card.classList.remove('is-flipped');
-			});
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					cards.forEach((card) => {
-						card.classList.remove('is-resetting');
-					});
-				});
-			});
-			currentPageIndex = nextPageIndex;
-		}, totalFlipTime);
+		currentPageIndex = nextPageIndex;
 	}
 
-	setInterval(flipToNextPage, FLIP_INTERVAL);
+	setInterval(showNextPage, CHANGE_INTERVAL);
 }
 
 if (document.readyState === 'loading') {
